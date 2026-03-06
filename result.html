@@ -1,567 +1,332 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>MBTI测试结果</title>
-  <style>
-    :root{
-      --bg:#f5f7fb;
-      --card:#ffffff;
-      --text:#1f2937;
-      --muted:#6b7280;
-      --line:#e5e7eb;
-      --primary:#111827;
-      --accent:#2563eb;
-      --shadow:0 12px 30px rgba(0,0,0,.08);
-      --radius:18px;
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MBTI测试结果</title>
 
-    *{box-sizing:border-box}
+<style>
 
-    body{
-      margin:0;
-      font-family:Arial,"PingFang SC","Microsoft YaHei",sans-serif;
-      background:linear-gradient(180deg,#f8fafc 0%, #f4f6fb 100%);
-      color:var(--text);
-      padding:32px 16px;
-    }
+body{
+font-family:Arial,Helvetica,sans-serif;
+background:#f4f6fb;
+margin:0;
+padding:40px;
+}
 
-    .container{
-      max-width:1100px;
-      margin:0 auto;
-    }
+.container{
+max-width:900px;
+margin:auto;
+background:white;
+padding:40px;
+border-radius:12px;
+box-shadow:0 10px 30px rgba(0,0,0,0.1);
+}
 
-    .card{
-      background:var(--card);
-      border-radius:var(--radius);
-      box-shadow:var(--shadow);
-      border:1px solid var(--line);
-      padding:28px;
-    }
+h1{
+text-align:center;
+margin-bottom:20px;
+}
 
-    .header{
-      text-align:center;
-      margin-bottom:28px;
-    }
+.type{
+font-size:42px;
+font-weight:bold;
+text-align:center;
+margin-bottom:30px;
+}
 
-    .title{
-      font-size:18px;
-      color:var(--muted);
-      margin-bottom:8px;
-    }
+.grid{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:20px;
+}
 
-    .type{
-      font-size:54px;
-      font-weight:800;
-      color:var(--primary);
-      margin:0;
-      letter-spacing:2px;
-    }
+.card{
+background:#fafafa;
+padding:20px;
+border-radius:10px;
+border:1px solid #eee;
+}
 
-    .subtitle{
-      margin-top:12px;
-      font-size:18px;
-      color:var(--text);
-      line-height:1.8;
-    }
+.card h3{
+margin-top:0;
+}
 
-    .summary{
-      margin-top:18px;
-      background:#f8fafc;
-      border:1px solid var(--line);
-      border-radius:16px;
-      padding:18px;
-      text-align:left;
-      line-height:1.9;
-      color:#374151;
-      font-size:15px;
-    }
+ul{
+padding-left:20px;
+line-height:1.7;
+}
 
-    .bars{
-      display:grid;
-      grid-template-columns:1fr 1fr;
-      gap:16px;
-      margin:24px 0 30px;
-    }
+.btnRow{
+margin-top:30px;
+text-align:center;
+}
 
-    @media (max-width:900px){
-      .bars{
-        grid-template-columns:1fr;
-      }
-    }
+button{
+padding:12px 20px;
+margin:8px;
+border:none;
+border-radius:8px;
+cursor:pointer;
+font-size:14px;
+}
 
-    .barCard{
-      border:1px solid var(--line);
-      border-radius:16px;
-      padding:16px;
-      background:#fcfcff;
-    }
+.btnPrimary{
+background:#3b82f6;
+color:white;
+}
 
-    .barTitle{
-      font-size:14px;
-      color:var(--muted);
-      margin-bottom:10px;
-    }
+.btnGhost{
+background:#eee;
+}
 
-    .barLabels{
-      display:flex;
-      justify-content:space-between;
-      font-size:13px;
-      margin-bottom:6px;
-      color:#4b5563;
-    }
+.tip{
+text-align:center;
+margin-top:20px;
+color:#666;
+font-size:13px;
+}
 
-    .track{
-      height:12px;
-      border-radius:999px;
-      background:#e5e7eb;
-      overflow:hidden;
-    }
+@media(max-width:700px){
 
-    .fill{
-      height:100%;
-      background:linear-gradient(90deg,#3b82f6,#6366f1);
-      width:50%;
-      transition:width .3s ease;
-    }
+.grid{
+grid-template-columns:1fr;
+}
 
-    .barDesc{
-      margin-top:8px;
-      font-size:13px;
-      color:var(--muted);
-      line-height:1.7;
-    }
+}
 
-    .grid{
-      display:grid;
-      grid-template-columns:1fr 1fr;
-      gap:18px;
-    }
-
-    @media (max-width:900px){
-      .grid{
-        grid-template-columns:1fr;
-      }
-    }
-
-    .section{
-      border:1px solid var(--line);
-      border-radius:18px;
-      padding:22px;
-      background:#fff;
-    }
-
-    .section h2{
-      margin:0 0 14px;
-      font-size:20px;
-      color:var(--primary);
-    }
-
-    .section ul{
-      margin:0;
-      padding-left:22px;
-      line-height:1.95;
-      font-size:15px;
-      color:#374151;
-    }
-
-    .tip{
-      margin-top:14px;
-      color:var(--muted);
-      font-size:14px;
-      line-height:1.8;
-    }
-
-    .footer{
-      margin-top:28px;
-      text-align:center;
-      color:var(--muted);
-      font-size:13px;
-      line-height:1.8;
-    }
-
-    .btnRow{
-      margin-top:24px;
-      display:flex;
-      justify-content:center;
-      gap:12px;
-      flex-wrap:wrap;
-    }
-
-    button{
-      border:none;
-      border-radius:12px;
-      padding:12px 18px;
-      cursor:pointer;
-      font-size:14px;
-    }
-
-    .btnPrimary{
-      background:#111827;
-      color:#fff;
-    }
-
-    .btnGhost{
-      background:#fff;
-      color:#111827;
-      border:1px solid var(--line);
-    }
-  </style>
+</style>
 </head>
+
 <body>
-  <div class="container">
-    <div class="card">
-      <div class="header">
-        <div class="title">你的 MBTI 人格类型</div>
-        <h1 class="type" id="mbtiType">ISTJ</h1>
-        <div class="subtitle" id="subTitle">你是一个偏理性、稳定、有责任感的人格类型。</div>
-      </div>
 
-      <div class="summary" id="summaryText"></div>
+<div class="container" id="captureArea">
 
-      <div class="bars">
-        <div class="barCard">
-          <div class="barTitle">能量来源</div>
-          <div class="barLabels"><span>外向 E</span><span>内向 I</span></div>
-          <div class="track"><div class="fill" id="barEI"></div></div>
-          <div class="barDesc" id="descEI"></div>
-        </div>
+<h1>你的MBTI人格类型</h1>
 
-        <div class="barCard">
-          <div class="barTitle">信息处理</div>
-          <div class="barLabels"><span>实感 S</span><span>直觉 N</span></div>
-          <div class="track"><div class="fill" id="barSN"></div></div>
-          <div class="barDesc" id="descSN"></div>
-        </div>
+<div class="type" id="typeResult"></div>
 
-        <div class="barCard">
-          <div class="barTitle">决策方式</div>
-          <div class="barLabels"><span>思考 T</span><span>情感 F</span></div>
-          <div class="track"><div class="fill" id="barTF"></div></div>
-          <div class="barDesc" id="descTF"></div>
-        </div>
+<div class="grid">
 
-        <div class="barCard">
-          <div class="barTitle">生活方式</div>
-          <div class="barLabels"><span>判断 J</span><span>感知 P</span></div>
-          <div class="track"><div class="fill" id="barJP"></div></div>
-          <div class="barDesc" id="descJP"></div>
-        </div>
-      </div>
+<div class="card">
+<h3>性格优势</h3>
+<ul id="strengths"></ul>
+</div>
 
-      <div class="grid">
-        <div class="section">
-          <h2>性格优势</h2>
-          <ul id="strengths"></ul>
-          <div class="tip" id="strengthTip"></div>
-        </div>
+<div class="card">
+<h3>需要注意</h3>
+<ul id="weaknesses"></ul>
+</div>
 
-        <div class="section">
-          <h2>需要注意</h2>
-          <ul id="weaknesses"></ul>
-          <div class="tip" id="weaknessTip"></div>
-        </div>
+<div class="card">
+<h3>适合职业</h3>
+<ul id="careers"></ul>
+</div>
 
-        <div class="section">
-          <h2>恋爱/关系模式</h2>
-          <ul id="love"></ul>
-          <div class="tip" id="loveTip"></div>
-        </div>
+<div class="card">
+<h3>成长建议</h3>
+<ul id="growth"></ul>
+</div>
 
-        <div class="section">
-          <h2>适合职业与工作方式</h2>
-          <ul id="career"></ul>
-          <div class="tip" id="careerTip"></div>
-        </div>
+</div>
 
-        <div class="section">
-          <h2>压力下的你</h2>
-          <ul id="stress"></ul>
-          <div class="tip" id="stressTip"></div>
-        </div>
+<div class="btnRow">
 
-        <div class="section">
-          <h2>成长建议（最快见效的7天行动）</h2>
-          <ul id="growth"></ul>
-          <div class="tip" id="growthTip"></div>
-        </div>
-      </div>
+<button class="btnGhost" onclick="location.href='test.html'">重新测试</button>
 
-      <div class="btnRow">
-        <button class="btnGhost" onclick="location.href='test.html'">重新测试</button>
-        <button class="btnPrimary" onclick="copyResult()">复制结果摘要</button>
-      </div>
+<button class="btnGhost" onclick="saveScreenshot()">保存结果截图</button>
 
-      <div class="footer">
-        本测试仅用于自我了解与成长参考，结果会受到当前状态与答题方式影响。<br>
-        结果数据仅保存在你的浏览器本地。
-      </div>
-    </div>
-  </div>
+<button class="btnPrimary" onclick="copyResult()">复制结果摘要</button>
 
-  <script>
-    const dataMap = {
-      ISTJ: {
-        subTitle: "你是一个偏理性、稳定、有责任感的人格类型。",
-        summary: "ISTJ 通常给人的感觉是稳、可靠、重承诺。你做事更看重秩序、规则和结果，适合在明确结构下长期深耕。你并不是不会表达情绪，而是更习惯用行动而不是情绪化的语言去证明自己。",
-        strengths: [
-          "责任感强，答应的事情通常会认真做到",
-          "做事稳重，容易获得他人信任",
-          "逻辑清晰，执行力较强",
-          "重视规则和秩序，不容易随波逐流",
-          "在长期、稳定的任务中优势明显"
-        ],
-        weaknesses: [
-          "容易对变化和混乱环境感到烦躁",
-          "不太擅长高频情绪沟通，容易显得冷",
-          "在高压下会变得更固执或更封闭",
-          "容易要求自己和别人都“按标准来”",
-          "不喜欢无意义社交，容易被误解为不好接近"
-        ],
-        love: [
-          "你更需要被尊重与被理解，而不是被控制",
-          "雷区：忽视边界、反复无常、缺乏安全感建设",
-          "你在关系中更看重长期稳定，而不是短期激情",
-          "更适合与价值观稳定、情绪边界清晰的人相处",
-          "建议：把需求说具体，不要让对方猜"
-        ],
-        career: [
-          "适合：行政、人事、运营、财务、法务、项目管理等",
-          "工作选择标准：消耗少、反馈清晰、可持续成长",
-          "你在规则明确、分工清晰的岗位上更容易稳定发挥",
-          "加分技能：表达、复盘、流程管理",
-          "你不适合长期高压且毫无边界的工作环境"
-        ],
-        stress: [
-          "压力大时会出现拖延、睡眠下降、社交回避",
-          "容易觉得别人不靠谱，从而把事情都揽到自己身上",
-          "会变得更沉默，但内心压力其实更大",
-          "越累越容易执着于细节，反而效率下降",
-          "你不是不行，而是需要先恢复能量，再处理问题"
-        ],
-        growth: [
-          "每天10分钟复盘：今天做对了什么？",
-          "把目标拆成周计划，每周只抓1-2件最关键的事",
-          "建立边界：减少无底线的额外消耗",
-          "练习表达：先说结论，再说原因",
-          "每周安排一次深度休息，让大脑真的停下来",
-          "用运动/睡眠把自己拉回稳定区间",
-          "学会让自己“完成”，而不是一直追求完美"
-        ],
-        strengthTip: "建议：把你的“稳定、负责、靠谱”做成长期优势，而不是默默消耗自己。",
-        weaknessTip: "建议：你的问题不在于能力，而在于容易在高压下过度用力。",
-        loveTip: "建议：关系里最重要的是看见彼此真正的底层需求。",
-        careerTip: "提示：选择“消耗更少、反馈更清晰”的岗位，会更容易做出成绩。",
-        stressTip: "建议：你不是脆弱，而是比别人更需要一套恢复系统。",
-        growthTip: "做法：只做其中2条，坚持一周，你会明显感觉状态更稳。"
-      },
+</div>
 
-      ENFP: {
-        subTitle: "你是一个热情、灵活、富有感染力的人格类型。",
-        summary: "ENFP 通常充满热情和生命力，擅长与人建立连接，也擅长发现新的可能性。你有很强的情绪感受力和表达欲，容易在有兴趣、有意义的事情上爆发出很强行动力。但一旦环境压抑、重复或被束缚，你就容易迅速失去能量。",
-        strengths: [
-          "感染力强，容易带动氛围",
-          "创意丰富，想法很多",
-          "适应能力强，对新鲜事物接受快",
-          "善于表达和连接他人",
-          "在有热情的方向上行动力很强"
-        ],
-        weaknesses: [
-          "容易三分钟热度，缺少持续收尾",
-          "在重复和无聊任务中容易分心",
-          "情绪受环境影响较大",
-          "容易因为想得太多而拖延",
-          "不喜欢被规则束缚"
-        ],
-        love: [
-          "你需要被理解、被看见，而不是被限制",
-          "你在关系里更看重精神交流和情绪回应",
-          "雷区：冷淡、控制、忽略你的表达欲",
-          "容易因为期待太高而对关系失望",
-          "建议：把需求说清楚，不要只靠感觉维系"
-        ],
-        career: [
-          "适合：内容创作、市场、品牌、策划、教育、自媒体等",
-          "你适合需要表达、连接、创造的岗位",
-          "工作方式上更适合灵活、自由度高的环境",
-          "加分技能：执行力、项目管理、复盘能力",
-          "不适合长期过于机械、压抑、重复的岗位"
-        ],
-        stress: [
-          "压力大时会拖延、逃避、刷手机、情绪波动",
-          "容易对自己产生怀疑，怀疑自己是不是“不够好”",
-          "可能突然失去动力，不想社交也不想做事",
-          "会想很多，但行动减少",
-          "你最需要的不是逼自己，而是先恢复状态"
-        ],
-        growth: [
-          "每天先完成一件最重要的小任务",
-          "练习把大目标拆成具体步骤",
-          "减少无意义信息输入，比如短视频/刷屏",
-          "建立简单作息，让自己稳定下来",
-          "把灵感记录下来，但不要每个都立刻开始",
-          "练习“先交付，再优化”",
-          "给自己设置明确的小截止时间"
-        ],
-        strengthTip: "建议：你的热情与创造力很值钱，但一定要配合执行力。",
-        weaknessTip: "建议：你不是不行，而是太容易被分散注意力。",
-        loveTip: "建议：对你来说，被认真回应，比一时浪漫更重要。",
-        careerTip: "提示：你越能表达、连接与创造，越容易出成绩。",
-        stressTip: "建议：你先把状态拉回来，结果自然会跟上。",
-        growthTip: "做法：别一下子改很多，只抓1-2个最关键的习惯。"
-      }
-    };
+<p class="tip">
+本页面不收集个人隐私数据，结果仅保存在你的浏览器本地。
+</p>
 
-    function fallbackData(type){
-      return {
-        subTitle: "你的人格结果已经生成，这是一个具有独特思维和行为模式的类型。",
-        summary: `${type} 类型代表你在四个维度上有相对稳定的倾向。你有自己的思考方式、情绪模式与处理问题的方法。结果不是给你贴标签，而是帮助你更理解自己。`,
-        strengths: [
-          "你有自己独特的优势和行为节奏",
-          "在适合的环境里，你会表现得更稳定",
-          "你具备某些天生更顺手的能力",
-          "你的成长空间非常明确",
-          "你适合把优势做成长期积累"
-        ],
-        weaknesses: [
-          "在压力环境下，某些短板会被放大",
-          "你可能会在不适合的环境里被过度消耗",
-          "容易误以为自己有问题，其实只是环境不匹配",
-          "结果不是绝对的，而是倾向性的参考",
-          "真正重要的是你如何使用这些倾向"
-        ],
-        love: [
-          "你需要在关系里被尊重和理解",
-          "情绪稳定和边界清晰会让你更舒服",
-          "你更适合与能沟通的人建立长期关系",
-          "你需要练习清晰表达需求",
-          "越懂自己，越能建立稳定关系"
-        ],
-        career: [
-          "适合的职业，取决于你的长期优势与消耗点",
-          "选择反馈清晰的环境，会更容易积累成就感",
-          "要避免长期高压、边界混乱的环境",
-          "更适合能发挥你真实特质的岗位",
-          "建议结合兴趣与现实资源一起判断"
-        ],
-        stress: [
-          "你在压力下会出现明显的能量波动",
-          "容易拖延、怀疑自己或变得情绪化",
-          "需要先恢复状态，再去解决问题",
-          "能量恢复比硬撑更重要",
-          "规律作息和休息系统很关键"
-        ],
-        growth: [
-          "每天做一点点，而不是等状态完美",
-          "先完成，再优化",
-          "减少让你分心的信息输入",
-          "关注长期稳定，而不是一时冲刺",
-          "让自己保持足够的休息",
-          "学会表达边界和需求",
-          "坚持一周，你会比现在更稳"
-        ],
-        strengthTip: "建议：把你的优势变成长期可复用的能力。",
-        weaknessTip: "建议：短板不可怕，关键是别让它反复拖垮你。",
-        loveTip: "建议：懂自己，才能更好地经营关系。",
-        careerTip: "提示：匹配比努力更重要。",
-        stressTip: "建议：你不是不行，是需要恢复和调节。",
-        growthTip: "做法：一次只改一点，反而更容易坚持。"
-      };
-    }
+</div>
 
-    function getType(){
-      const params = new URLSearchParams(location.search);
-      const typeFromUrl = params.get("type");
-      const typeFromStorage = localStorage.getItem("mbtiType");
-      return typeFromUrl || typeFromStorage || "ISTJ";
-    }
+<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 
-    function getScores(){
-      const params = new URLSearchParams(location.search);
-      const scoreKeys = ["E","I","S","N","T","F","J","P"];
-      let scores = {};
-      let hasAny = false;
+<script>
 
-      scoreKeys.forEach(key => {
-        const val = Number(params.get(key));
-        if(!isNaN(val) && params.get(key) !== null){
-          scores[key] = val;
-          hasAny = true;
-        }
-      });
+const mbtiData={
 
-      if(hasAny) return scores;
+INTJ:{
+strengths:["战略思维强","目标清晰","独立思考能力强"],
+weaknesses:["容易过度理性","不喜欢情绪表达","容易孤立自己"],
+careers:["战略规划","产品经理","数据分析","科研"],
+growth:["多表达情绪","学会团队合作","保持开放心态"]
+},
 
-      try{
-        const local = JSON.parse(localStorage.getItem("mbtiScores"));
-        if(local) return local;
-      }catch(e){}
+INTP:{
+strengths:["逻辑能力强","创造力高","好奇心强"],
+weaknesses:["拖延","不善执行","容易分心"],
+careers:["程序开发","研究员","设计师","工程师"],
+growth:["提高执行力","设定清晰目标","减少拖延"]
+},
 
-      return {E:1,I:1,S:1,N:1,T:1,F:1,J:1,P:1};
-    }
+ENTJ:{
+strengths:["领导力强","决策果断","执行力高"],
+weaknesses:["容易强势","忽视情绪","控制欲强"],
+careers:["企业管理","创业","战略顾问","投资"],
+growth:["倾听他人意见","培养耐心","关注情绪管理"]
+},
 
-    function setBar(id, left, right, leftLabel, rightLabel, descId){
-      const total = left + right;
-      const leftPercent = total === 0 ? 50 : Math.round((left / total) * 100);
-      document.getElementById(id).style.width = leftPercent + "%";
+ENTP:{
+strengths:["思维敏捷","创意丰富","沟通能力强"],
+weaknesses:["不够稳定","容易三分钟热度","执行力不足"],
+careers:["创业","营销","策划","媒体"],
+growth:["坚持长期目标","提高执行能力","减少分心"]
+},
 
-      let text = "";
-      if(leftPercent > 60){
-        text = `你在这一维度更偏向 ${leftLabel}。`;
-      }else if(leftPercent < 40){
-        text = `你在这一维度更偏向 ${rightLabel}。`;
-      }else{
-        text = `你在这一维度比较均衡。`;
-      }
-      document.getElementById(descId).textContent = text;
-    }
+INFJ:{
+strengths:["洞察力强","共情能力高","理想主义"],
+weaknesses:["容易内耗","过度敏感","压力大"],
+careers:["心理咨询","教育","写作","艺术"],
+growth:["减少自我压力","保持边界","加强现实行动"]
+},
 
-    function fillList(id, arr){
-      const ul = document.getElementById(id);
-      ul.innerHTML = "";
-      arr.forEach(item => {
-        const li = document.createElement("li");
-        li.textContent = item;
-        ul.appendChild(li);
-      });
-    }
+INFP:{
+strengths:["富有同理心","创造力强","价值观清晰"],
+weaknesses:["理想化","逃避冲突","拖延"],
+careers:["艺术","设计","写作","心理领域"],
+growth:["提高行动力","面对现实挑战","保持稳定节奏"]
+},
 
-    function copyResult(){
-      const type = document.getElementById("mbtiType").textContent;
-      const summary = document.getElementById("summaryText").textContent;
-      const text = `MBTI结果：${type}\n\n${summary}`;
-      navigator.clipboard.writeText(text).then(() => {
-        alert("结果摘要已复制");
-      });
-    }
+ENFJ:{
+strengths:["领导魅力","沟通能力强","关心他人"],
+weaknesses:["容易过度付出","情绪消耗大","压力大"],
+careers:["教育","管理","心理咨询","培训"],
+growth:["学会拒绝","保持自我边界","关注自我需求"]
+},
 
-    const type = getType();
-    const scores = getScores();
-    const content = dataMap[type] || fallbackData(type);
+ENFP:{
+strengths:["热情","创造力强","社交能力高"],
+weaknesses:["缺乏持续性","容易分心","情绪波动"],
+careers:["市场营销","创意行业","媒体","培训"],
+growth:["建立稳定习惯","专注长期目标","提高执行力"]
+},
 
-    document.getElementById("mbtiType").textContent = type;
-    document.getElementById("subTitle").textContent = content.subTitle;
-    document.getElementById("summaryText").textContent = content.summary;
+ISTJ:{
+strengths:["责任心强","执行力高","稳定可靠"],
+weaknesses:["不喜欢变化","表达情绪少","过度严谨"],
+careers:["财务","行政","工程","管理"],
+growth:["尝试新事物","提高灵活性","多沟通"]
+},
 
-    fillList("strengths", content.strengths);
-    fillList("weaknesses", content.weaknesses);
-    fillList("love", content.love);
-    fillList("career", content.career);
-    fillList("stress", content.stress);
-    fillList("growth", content.growth);
+ISFJ:{
+strengths:["细心","可靠","关心他人"],
+weaknesses:["不善拒绝","压力容易积累","容易自责"],
+careers:["医疗","护理","教育","行政"],
+growth:["建立边界","关注自我需求","减少压力"]
+},
 
-    document.getElementById("strengthTip").textContent = content.strengthTip;
-    document.getElementById("weaknessTip").textContent = content.weaknessTip;
-    document.getElementById("loveTip").textContent = content.loveTip;
-    document.getElementById("careerTip").textContent = content.careerTip;
-    document.getElementById("stressTip").textContent = content.stressTip;
-    document.getElementById("growthTip").textContent = content.growthTip;
+ESTJ:{
+strengths:["组织能力强","执行力高","领导能力"],
+weaknesses:["过于严格","不够灵活","容易控制"],
+careers:["管理","军警","行政","企业运营"],
+growth:["提高包容性","增加灵活性","倾听他人"]
+},
 
-    setBar("barEI", scores.E, scores.I, "外向 E", "内向 I", "descEI");
-    setBar("barSN", scores.S, scores.N, "实感 S", "直觉 N", "descSN");
-    setBar("barTF", scores.T, scores.F, "思考 T", "情感 F", "descTF");
-    setBar("barJP", scores.J, scores.P, "判断 J", "感知 P", "descJP");
-  </script>
+ESFJ:{
+strengths:["社交能力强","关心他人","组织能力好"],
+weaknesses:["过度在意评价","压力大","难以拒绝"],
+careers:["教育","销售","客服","公共关系"],
+growth:["保持自我价值","减少依赖评价","建立边界"]
+},
+
+ISTP:{
+strengths:["动手能力强","冷静","解决问题能力高"],
+weaknesses:["不善表达情绪","不喜欢规则","容易独立"],
+careers:["工程","技术","维修","运动"],
+growth:["加强沟通","增加团队合作","表达情绪"]
+},
+
+ISFP:{
+strengths:["艺术感强","温和","感受力高"],
+weaknesses:["不喜欢压力","回避冲突","容易情绪化"],
+careers:["艺术","设计","音乐","摄影"],
+growth:["提高行动力","面对挑战","稳定情绪"]
+},
+
+ESTP:{
+strengths:["行动力强","社交能力高","适应力强"],
+weaknesses:["冲动","不够计划","容易冒险"],
+careers:["销售","创业","体育","娱乐"],
+growth:["增加规划能力","减少冲动","长期目标"]
+},
+
+ESFP:{
+strengths:["热情","社交能力强","感染力强"],
+weaknesses:["缺乏计划","容易分心","短期思维"],
+careers:["娱乐","表演","销售","活动策划"],
+growth:["建立长期目标","提升计划能力","专注成长"]
+}
+
+};
+
+function getType(){
+return localStorage.getItem("mbtiType")||"INTJ";
+}
+
+function render(){
+
+const type=getType();
+
+const data=mbtiData[type];
+
+document.getElementById("typeResult").innerText=type;
+
+data.strengths.forEach(i=>{
+document.getElementById("strengths").innerHTML+=`<li>${i}</li>`
+})
+
+data.weaknesses.forEach(i=>{
+document.getElementById("weaknesses").innerHTML+=`<li>${i}</li>`
+})
+
+data.careers.forEach(i=>{
+document.getElementById("careers").innerHTML+=`<li>${i}</li>`
+})
+
+data.growth.forEach(i=>{
+document.getElementById("growth").innerHTML+=`<li>${i}</li>`
+})
+
+}
+
+function copyResult(){
+
+const type=getType();
+
+const text=`我的MBTI人格类型是 ${type}`;
+
+navigator.clipboard.writeText(text);
+
+alert("结果已复制");
+
+}
+
+async function saveScreenshot(){
+
+const area=document.getElementById("captureArea");
+
+const canvas=await html2canvas(area,{scale:2});
+
+const link=document.createElement("a");
+
+link.download="mbti-result.png";
+
+link.href=canvas.toDataURL();
+
+link.click();
+
+}
+
+render();
+
+</script>
+
 </body>
 </html>
