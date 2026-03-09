@@ -2,327 +2,191 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>MBTI测试结果</title>
-
 <style>
-
 body{
-font-family:Arial,Helvetica,sans-serif;
-background:#f4f6fb;
-margin:0;
-padding:40px;
+  font-family: Arial, sans-serif;
+  background:#f4f6fb;
+  padding:40px;
 }
-
-.container{
-max-width:900px;
-margin:auto;
-background:white;
-padding:40px;
-border-radius:12px;
-box-shadow:0 10px 30px rgba(0,0,0,0.1);
+.box{
+  max-width:700px;
+  margin:auto;
+  background:white;
+  padding:40px;
+  border-radius:10px;
+  box-shadow:0 10px 30px rgba(0,0,0,0.1);
 }
-
-h1{
-text-align:center;
-margin-bottom:20px;
+h1,h2{
+  text-align:center;
 }
-
-.type{
-font-size:42px;
-font-weight:bold;
-text-align:center;
-margin-bottom:30px;
+h3{
+  margin-bottom:5px;
 }
-
-.grid{
-display:grid;
-grid-template-columns:1fr 1fr;
-gap:20px;
-}
-
-.card{
-background:#fafafa;
-padding:20px;
-border-radius:10px;
-border:1px solid #eee;
-}
-
-.card h3{
-margin-top:0;
-}
-
 ul{
-padding-left:20px;
-line-height:1.7;
+  list-style: disc inside;
+  padding-left: 0;
 }
-
 .btnRow{
-margin-top:30px;
-text-align:center;
+  margin-top:20px;
+  display:flex;
+  justify-content: space-between;
 }
-
-button{
-padding:12px 20px;
-margin:8px;
-border:none;
-border-radius:8px;
-cursor:pointer;
-font-size:14px;
-}
-
-.btnPrimary{
-background:#3b82f6;
-color:white;
-}
-
 .btnGhost{
-background:#eee;
+  background:none;
+  border:1px solid #ccc;
+  padding:10px 20px;
+  cursor:pointer;
 }
-
-.tip{
-text-align:center;
-margin-top:20px;
-color:#666;
-font-size:13px;
-}
-
-@media(max-width:700px){
-
-.grid{
-grid-template-columns:1fr;
-}
-
-}
-
 </style>
 </head>
-
 <body>
-
-<div class="container" id="captureArea">
-
+<div class="box">
 <h1>你的MBTI人格类型</h1>
-
-<div class="type" id="typeResult"></div>
-
-<div class="grid">
-
-<div class="card">
-<h3>性格优势</h3>
-<ul id="strengths"></ul>
-</div>
-
-<div class="card">
-<h3>需要注意</h3>
-<ul id="weaknesses"></ul>
-</div>
-
-<div class="card">
-<h3>适合职业</h3>
-<ul id="careers"></ul>
-</div>
-
-<div class="card">
-<h3>成长建议</h3>
-<ul id="growth"></ul>
-</div>
-
+<div id="resultContent">
+  <h2 id="type">ISTJ</h2>
+  <div>
+    <h3>性格优势</h3>
+    <ul id="strengths"></ul>
+  </div>
+  <div>
+    <h3>需要注意</h3>
+    <ul id="weaknesses"></ul>
+  </div>
+  <div>
+    <h3>适合职业</h3>
+    <ul id="careers"></ul>
+  </div>
+  <div>
+    <h3>成长建议</h3>
+    <ul id="growth"></ul>
+  </div>
 </div>
 
 <div class="btnRow">
-
-<button class="btnGhost" onclick="location.href='test.html'">重新测试</button>
-
+  <button class="btnGhost" onclick="location.href='test.html'">重新测试</button>
 </div>
 
-<p class="tip">
-本页面不收集个人隐私数据，结果仅保存在你的浏览器本地。
-</p>
-
+<p class="tip">本页面不收集个人隐私数据，结果仅保存在你的浏览器本地。</p>
 </div>
-
-<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 
 <script>
-
-const mbtiData={
-
-INTJ:{
-strengths:["战略思维强","目标清晰","独立思考能力强"],
-weaknesses:["容易过度理性","不喜欢情绪表达","容易孤立自己"],
-careers:["战略规划","产品经理","数据分析","科研"],
-growth:["多表达情绪","学会团队合作","保持开放心态"]
-},
-
-INTP:{
-strengths:["逻辑能力强","创造力高","好奇心强"],
-weaknesses:["拖延","不善执行","容易分心"],
-careers:["程序开发","研究员","设计师","工程师"],
-growth:["提高执行力","设定清晰目标","减少拖延"]
-},
-
-ENTJ:{
-strengths:["领导力强","决策果断","执行力高"],
-weaknesses:["容易强势","忽视情绪","控制欲强"],
-careers:["企业管理","创业","战略顾问","投资"],
-growth:["倾听他人意见","培养耐心","关注情绪管理"]
-},
-
-ENTP:{
-strengths:["思维敏捷","创意丰富","沟通能力强"],
-weaknesses:["不够稳定","容易三分钟热度","执行力不足"],
-careers:["创业","营销","策划","媒体"],
-growth:["坚持长期目标","提高执行能力","减少分心"]
-},
-
-INFJ:{
-strengths:["洞察力强","共情能力高","理想主义"],
-weaknesses:["容易内耗","过度敏感","压力大"],
-careers:["心理咨询","教育","写作","艺术"],
-growth:["减少自我压力","保持边界","加强现实行动"]
-},
-
-INFP:{
-strengths:["富有同理心","创造力强","价值观清晰"],
-weaknesses:["理想化","逃避冲突","拖延"],
-careers:["艺术","设计","写作","心理领域"],
-growth:["提高行动力","面对现实挑战","保持稳定节奏"]
-},
-
-ENFJ:{
-strengths:["领导魅力","沟通能力强","关心他人"],
-weaknesses:["容易过度付出","情绪消耗大","压力大"],
-careers:["教育","管理","心理咨询","培训"],
-growth:["学会拒绝","保持自我边界","关注自我需求"]
-},
-
-ENFP:{
-strengths:["热情","创造力强","社交能力高"],
-weaknesses:["缺乏持续性","容易分心","情绪波动"],
-careers:["市场营销","创意行业","媒体","培训"],
-growth:["建立稳定习惯","专注长期目标","提高执行力"]
-},
-
-ISTJ:{
-strengths:["责任心强","执行力高","稳定可靠"],
-weaknesses:["不喜欢变化","表达情绪少","过度严谨"],
-careers:["财务","行政","工程","管理"],
-growth:["尝试新事物","提高灵活性","多沟通"]
-},
-
-ISFJ:{
-strengths:["细心","可靠","关心他人"],
-weaknesses:["不善拒绝","压力容易积累","容易自责"],
-careers:["医疗","护理","教育","行政"],
-growth:["建立边界","关注自我需求","减少压力"]
-},
-
-ESTJ:{
-strengths:["组织能力强","执行力高","领导能力"],
-weaknesses:["过于严格","不够灵活","容易控制"],
-careers:["管理","军警","行政","企业运营"],
-growth:["提高包容性","增加灵活性","倾听他人"]
-},
-
-ESFJ:{
-strengths:["社交能力强","关心他人","组织能力好"],
-weaknesses:["过度在意评价","压力大","难以拒绝"],
-careers:["教育","销售","客服","公共关系"],
-growth:["保持自我价值","减少依赖评价","建立边界"]
-},
-
-ISTP:{
-strengths:["动手能力强","冷静","解决问题能力高"],
-weaknesses:["不善表达情绪","不喜欢规则","容易独立"],
-careers:["工程","技术","维修","运动"],
-growth:["加强沟通","增加团队合作","表达情绪"]
-},
-
-ISFP:{
-strengths:["艺术感强","温和","感受力高"],
-weaknesses:["不喜欢压力","回避冲突","容易情绪化"],
-careers:["艺术","设计","音乐","摄影"],
-growth:["提高行动力","面对挑战","稳定情绪"]
-},
-
-ESTP:{
-strengths:["行动力强","社交能力高","适应力强"],
-weaknesses:["冲动","不够计划","容易冒险"],
-careers:["销售","创业","体育","娱乐"],
-growth:["增加规划能力","减少冲动","长期目标"]
-},
-
-ESFP:{
-strengths:["热情","社交能力强","感染力强"],
-weaknesses:["缺乏计划","容易分心","短期思维"],
-careers:["娱乐","表演","销售","活动策划"],
-growth:["建立长期目标","提升计划能力","专注成长"]
-}
-
+const mbtiData = {
+  INTJ:{
+    strengths:["战略思维强","目标清晰","独立思考能力强"],
+    weaknesses:["容易过度理性","不喜欢情绪表达","容易孤立自己"],
+    careers:["战略规划","产品经理","数据分析","科研"],
+    growth:["多表达情绪","学会团队合作","保持开放心态"]
+  },
+  INTP:{
+    strengths:["逻辑能力强","创造力高","好奇心强"],
+    weaknesses:["拖延","不善执行","容易分心"],
+    careers:["程序开发","研究员","设计师","工程师"],
+    growth:["提高执行力","设定清晰目标","减少拖延"]
+  },
+  ENTJ:{
+    strengths:["领导力强","决策果断","执行力高"],
+    weaknesses:["容易强势","忽视情绪","控制欲强"],
+    careers:["企业管理","创业","战略顾问","投资"],
+    growth:["倾听他人意见","培养耐心","关注情绪管理"]
+  },
+  ENTP:{
+    strengths:["善于创新","口才好","思维灵活"],
+    weaknesses:["容易分散注意力","不善收尾","冲动"],
+    careers:["市场策划","广告","创业","产品设计"],
+    growth:["学会执行计划","专注目标","稳住节奏"]
+  },
+  INFJ:{
+    strengths:["洞察力强","有同理心","计划周密"],
+    weaknesses:["容易压力大","过于理想化","难以拒绝他人"],
+    careers:["心理咨询","教师","作家","设计"],
+    growth:["设立界限","学会放松","接受不完美"]
+  },
+  INFP:{
+    strengths:["富有同理心","价值观坚定","创造力强"],
+    weaknesses:["情绪化","拖延","优柔寡断"],
+    careers:["写作","心理咨询","艺术设计","教育"],
+    growth:["增强执行力","面对现实","管理情绪"]
+  },
+  ENFJ:{
+    strengths:["善于沟通","有号召力","责任心强"],
+    weaknesses:["过于关注他人","容易压力大","情绪波动"],
+    careers:["教师","公关","团队管理","咨询"],
+    growth:["学会自我调节","设立界限","关注内心需求"]
+  },
+  ENFP:{
+    strengths:["热情开朗","善于激励他人","创造力强"],
+    weaknesses:["容易分心","不善收尾","情绪化"],
+    careers:["营销","创意策划","培训","写作"],
+    growth:["专注目标","管理时间","稳住情绪"]
+  },
+  ISTJ:{
+    strengths:["严谨负责","执行力强","组织能力高"],
+    weaknesses:["固执","不够灵活","容易拘泥细节"],
+    careers:["财务","行政","管理","法务"],
+    growth:["学习适度放松","提高灵活性","学会沟通"]
+  },
+  ISFJ:{
+    strengths:["可靠","有责任心","善于照顾他人"],
+    weaknesses:["过于保守","容易压力大","缺乏创新"],
+    careers:["护理","教育","行政","财务"],
+    growth:["学会自我关怀","尝试新事物","放松控制"]
+  },
+  ESTJ:{
+    strengths:["组织能力强","执行力高","领导能力"],
+    weaknesses:["过于严格","不够灵活","容易控制"],
+    careers:["管理","军警","行政","企业运营"],
+    growth:["提高包容性","增加灵活性","倾听他人"]
+  },
+  ESFJ:{
+    strengths:["乐于助人","善于沟通","细心"],
+    weaknesses:["容易取悦他人","过于在意评价","情绪化"],
+    careers:["教育","医疗","公关","行政"],
+    growth:["学会说不","自我肯定","情绪管理"]
+  },
+  ISTP:{
+    strengths:["动手能力强","冷静分析","独立"],
+    weaknesses:["不喜欢约束","不善沟通","冲动"],
+    careers:["工程技术","维修","程序员","设计"],
+    growth:["增强沟通","管理情绪","稳定节奏"]
+  },
+  ISFP:{
+    strengths:["艺术感强","观察敏锐","善解人意"],
+    weaknesses:["情绪化","拖延","不善计划"],
+    careers:["设计","艺术","心理咨询","教育"],
+    growth:["管理时间","学会规划","控制情绪"]
+  },
+  ESTP:{
+    strengths:["反应快","适应力强","敢于冒险"],
+    weaknesses:["冲动","不注重细节","情绪波动"],
+    careers:["销售","市场","运动","创业"],
+    growth:["学会计划","控制冲动","管理情绪"]
+  },
+  ESFP:{
+    strengths:["外向活泼","乐观","善于交际"],
+    weaknesses:["易分心","情绪化","缺乏计划"],
+    careers:["表演","销售","旅游","活动策划"],
+    growth:["增强专注力","学会计划","管理情绪"]
+  }
 };
 
-function getType(){
-return localStorage.getItem("mbtiType")||"INTJ";
+function renderResult(type){
+  const doc = mbtiData[type];
+  document.getElementById("type").textContent = type;
+  ["strengths","weaknesses","careers","growth"].forEach(field=>{
+    const el = document.getElementById(field);
+    el.innerHTML = "";
+    doc[field].forEach(item=>{
+      const li = document.createElement("li");
+      li.textContent = item;
+      el.appendChild(li);
+    });
+  });
 }
 
-function render(){
-
-const type=getType();
-
-const data=mbtiData[type];
-
-document.getElementById("typeResult").innerText=type;
-
-data.strengths.forEach(i=>{
-document.getElementById("strengths").innerHTML+=`<li>${i}</li>`
-})
-
-data.weaknesses.forEach(i=>{
-document.getElementById("weaknesses").innerHTML+=`<li>${i}</li>`
-})
-
-data.careers.forEach(i=>{
-document.getElementById("careers").innerHTML+=`<li>${i}</li>`
-})
-
-data.growth.forEach(i=>{
-document.getElementById("growth").innerHTML+=`<li>${i}</li>`
-})
-
-}
-
-function copyResult(){
-
-const type=getType();
-
-const text=`我的MBTI人格类型是 ${type}`;
-
-navigator.clipboard.writeText(text);
-
-alert("结果已复制");
-
-}
-
-async function saveScreenshot(){
-
-const area=document.getElementById("captureArea");
-
-const canvas=await html2canvas(area,{scale:2});
-
-const link=document.createElement("a");
-
-link.download="mbti-result.png";
-
-link.href=canvas.toDataURL();
-
-link.click();
-
-}
-
-render();
-
+// 从 test.html 读取用户选择结果
+const userType = localStorage.getItem("mbtiType") || "ISTJ";
+renderResult(userType);
 </script>
-
 </body>
 </html>
